@@ -1,4 +1,5 @@
 import users from './users';
+import posts from './posts';
 
 export default {
   Query: {
@@ -6,5 +7,6 @@ export default {
   },
   Mutation: {
     ...users.Mutation,
+    ...posts.Mutation,
   },
 };

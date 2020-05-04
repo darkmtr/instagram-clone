@@ -14,6 +14,9 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
   user.associate = function (models) {
+    user.hasOne(models.slug);
+    user.hasOne(models.profile);
+    user.hasMany(models.post, { as: 'postedBy' });
     // associations can be defined here
   };
   return user;

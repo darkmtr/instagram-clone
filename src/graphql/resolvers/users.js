@@ -19,6 +19,21 @@ export default {
 
       return 'asdasd';
     },
+    getCurrentUser: async (_, __, ctx) => {
+      isAuth(ctx);
+
+      const userId = ctx.payload.userId;
+
+      const userRow = await models.user.findAll({
+        where: { id: userId },
+        include: [{ model: models.profile }, { model: models.slug }],
+      });
+
+      const user = userRow[0].get({ plain: true });
+
+      user.password = undefined;
+      return user;
+    },
   },
   Mutation: {
     createUser: async (_, args, { res }) => {
