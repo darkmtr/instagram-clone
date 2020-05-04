@@ -41,6 +41,10 @@ app.post('/refresh_token', async (req, res) => {
     return res.send({ ok: false, token: '' });
   }
 
+  if (user.get({ plain: true }).tokenVersion !== payload.tokenVersion) {
+    return res.send({ ok: false, token: '' });
+  }
+
   sendRefreshToken(res, createRefreshToken(user));
 
   return res.send({

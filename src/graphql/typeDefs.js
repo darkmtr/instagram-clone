@@ -8,6 +8,7 @@ export default gql`
 
   type Mutation {
     createUser(username: String!, password: String!, slug: String!): Auth!
+    login(username: String!, password: String!): Auth!
   }
 
   type Profile {

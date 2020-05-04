@@ -1,4 +1,4 @@
-import bcrypt from 'bcryptjs';
+import bcrypt, { compare } from 'bcryptjs';
 
 import models from '../../models';
 import { checkUserInput } from '../../middleware/validate';
@@ -62,6 +62,45 @@ export default {
       console.log({ token });
 
       return { token };
+    },
+    login: async (_, args, { res }) => {
+      const { username, password } = args;
+
+      const errors = {};
+
+      if (!username) {
+        errors.username = { msg: 'Username is required' };
+      }
+
+      if (!password || password.length < 6) {
+        errors.username = { msg: 'Password should be at least 6 characters ' };
+      }
+
+      if (Object.keys(errors).length) {
+        throw new UserInputError('Invalid Input', { errors });
+      }
+
+      const user = await models.user.findOne({ where: { username } });
+
+      if (!user) {
+        throw new UserInputError('Invalid username or password');
+      }
+
+      const userObject = user.get({ plain: true });
+
+      const isPasswordMatching = await compare(password, user.password);
+
+      if (!isPasswordMatching) {
+        throw new UserInputError('Invalid username or password');
+      }
+
+      sendRefreshToken(res, createRefreshToken(userObject));
+
+      const token = generateAccessToken(userObject);
+
+      return {
+        token,
+      };
     },
   },
 };

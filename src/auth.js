@@ -5,13 +5,15 @@ export const generateAccessToken = (user) => {
     userId: user.id,
   };
   return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: '30m',
+    expiresIn: '15m',
   });
 };
 
 export const createRefreshToken = (user) => {
+  console.log(user);
   const payload = {
     userId: user.id,
+    tokenVersion: user.tokenVersion,
   };
   return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
     expiresIn: '30d',

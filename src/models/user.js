@@ -9,6 +9,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    tokenVersion: {
+      type: DataTypes.INTEGER,
+    },
   });
   user.associate = function (models) {
     // associations can be defined here
