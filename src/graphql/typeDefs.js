@@ -5,6 +5,7 @@ export default gql`
     hello: String!
     test: String!
     getCurrentUser: User!
+    getPostsByUser(userId: Int!): [Post!]!
   }
 
   type Mutation {
@@ -40,5 +41,15 @@ export default gql`
 
   type Auth {
     token: String!
+  }
+
+  type Post {
+    id: ID!
+    tags: [String]
+    description: String
+    image: String!
+    user: User!
+    createdAt: String!
+    updatedAt: String!
   }
 `;

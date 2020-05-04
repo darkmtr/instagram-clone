@@ -3,6 +3,22 @@ import models from '../../models';
 import { AuthenticationError, ApolloError } from 'apollo-server-express';
 
 export default {
+  Query: {
+    getPostsByUser: async (_, args) => {
+      const { userId } = args;
+
+      const postsRow = await models.post.findAll({
+        where: { postedBy: userId },
+        include: [{ model: models.user }],
+      });
+
+      const posts = postsRow.map((post) => post.get({ plain: true }));
+
+      console.log(posts);
+
+      return posts;
+    },
+  },
   Mutation: {
     createPost: async (_, args, ctx) => {
       isAuth(ctx);

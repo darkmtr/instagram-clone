@@ -4,6 +4,7 @@ import posts from './posts';
 export default {
   Query: {
     ...users.Query,
+    ...posts.Query,
   },
   Mutation: {
     ...users.Mutation,
