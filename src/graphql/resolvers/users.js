@@ -40,8 +40,6 @@ export default {
 
       const userObject = user.get({ plain: true });
 
-      console.log(userObject);
-
       const createdSlug = await models.slug.create({
         slug,
         userId: userObject.id,
@@ -49,17 +47,11 @@ export default {
 
       const slugObject = createdSlug.get({ plain: true });
 
-      console.log(slugObject);
-
       const profile = await models.profile.create({ userId: userObject.id });
-
-      const profileObject = profile.get({ plain: true });
 
       sendRefreshToken(res, createRefreshToken(userObject));
 
       const token = generateAccessToken(userObject);
-
-      console.log({ token });
 
       return { token };
     },
