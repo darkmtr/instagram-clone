@@ -8,7 +8,11 @@ import typeDefs from './graphql/typeDefs';
 import resolvers from './graphql/resolvers';
 import { verify } from 'jsonwebtoken';
 import models from './models';
-import { generateAccessToken } from './auth';
+import {
+  generateAccessToken,
+  createRefreshToken,
+  sendRefreshToken,
+} from './auth';
 
 const app = express();
 
@@ -36,6 +40,8 @@ app.post('/refresh_token', async (req, res) => {
   if (!user) {
     return res.send({ ok: false, token: '' });
   }
+
+  sendRefreshToken(res, createRefreshToken(user));
 
   return res.send({
     ok: false,

@@ -17,3 +17,7 @@ export const createRefreshToken = (user) => {
     expiresIn: '30d',
   });
 };
+
+export const sendRefreshToken = (res, token) => {
+  res.cookie('jid', token, { httpOnly: true });
+};

@@ -3,7 +3,11 @@ import bcrypt from 'bcryptjs';
 import models from '../../models';
 import { checkUserInput } from '../../middleware/validate';
 import { UserInputError } from 'apollo-server-express';
-import { generateAccessToken, createRefreshToken } from '../../auth';
+import {
+  generateAccessToken,
+  createRefreshToken,
+  sendRefreshToken,
+} from '../../auth';
 import { isAuth } from '../../authMiddleware';
 
 export default {
@@ -51,9 +55,7 @@ export default {
 
       const profileObject = profile.get({ plain: true });
 
-      res.cookie('jid', createRefreshToken(userObject), {
-        httpOnly: true,
-      });
+      sendRefreshToken(res, createRefreshToken(userObject));
 
       const token = generateAccessToken(userObject);
 
