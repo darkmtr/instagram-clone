@@ -12,13 +12,6 @@ import { isAuth } from '../../authMiddleware';
 
 export default {
   Query: {
-    test: (_, __, ctx) => {
-      isAuth(ctx);
-
-      console.log(ctx.payload);
-
-      return 'asdasd';
-    },
     getCurrentUser: async (_, __, ctx) => {
       isAuth(ctx);
 

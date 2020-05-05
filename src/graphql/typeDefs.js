@@ -3,7 +3,6 @@ import { gql } from 'apollo-server-express';
 export default gql`
   type Query {
     hello: String!
-    test: String!
     getCurrentUser: User!
     getPostsByUser(userId: Int!): [Post!]!
     getPostById(postId: Int!): Post!
@@ -16,7 +15,7 @@ export default gql`
     createPost(description: String, image: String!, tags: [String]): Post!
     updatePost(postId: Int!, description: String, tags: [String]): Post!
     deletePost(postId: Int!): Status!
-    createComment(postId: Int!, text: String!): String!
+    createComment(postId: Int!, text: String!): Comment!
     deleteComment(commentId: Int!): Status!
   }
 

@@ -7,13 +7,6 @@ export default {
   Types: {
     Comment: {
       author: async (parent, _, ctx) => {
-        // const userRef = await models.user.findOne({
-        //   where: { id: parent.userId },
-        //   include: [{ model: models.profile }],
-        // });
-
-        // const user = userRef.get({ plain: true });
-
         return ctx.userLoader.load(parent.userId);
       },
     },
@@ -69,9 +62,9 @@ export default {
         postId: post.id,
       });
 
-      console.log(commentRef);
-
-      return 'dsads';
+      const comment = commentRef.get({ plain: true });
+      comment.author = comment.userId;
+      return comment;
     },
     deleteComment: async (_, args, ctx) => {
       isAuth(ctx);
