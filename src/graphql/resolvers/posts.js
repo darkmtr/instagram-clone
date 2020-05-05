@@ -43,6 +43,18 @@ export default {
 
       return posts;
     },
+    getPostById: async (_, args) => {
+      const { postId } = args;
+
+      const postRef = await models.post.findOne({
+        where: { id: postId },
+        include: [{ model: models.comment }],
+      });
+
+      console.log(postRef);
+
+      return 'Dasds';
+    },
   },
   Mutation: {
     createPost: async (_, args, ctx) => {

@@ -6,6 +6,7 @@ export default gql`
     test: String!
     getCurrentUser: User!
     getPostsByUser(userId: Int!): [Post!]!
+    getPostById(postId: Int!): String!
   }
 
   type Mutation {
@@ -14,6 +15,7 @@ export default gql`
     createPost(description: String, image: String!, tags: [String]): Post!
     updatePost(postId: Int!, description: String, tags: [String]): Post!
     deletePost(postId: Int!): Status!
+    createComment(postId: Int!, text: String!): String!
   }
 
   type User {
