@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   });
   user.associate = function (models) {
     user.hasOne(models.slug);
+    user.hasMany(models.comment);
     user.hasOne(models.profile);
     user.hasMany(models.post, { foreignKey: 'postedBy' });
     // associations can be defined here

@@ -17,18 +17,29 @@ function InternalError(err) {
 }
 
 export default {
+  Types: {},
   Query: {
     getPostsByUser: async (_, args) => {
       const { userId } = args;
 
       const postsRow = await models.post.findAll({
         where: { postedBy: userId },
-        include: [{ model: models.user }],
       });
 
-      const posts = postsRow.map((post) => post.get({ plain: true }));
+      const userRef = await models.user.findOne({
+        where: { id: userId },
+        include: [{ model: models.profile }, { model: models.slug }],
+      });
 
-      console.log(posts);
+      const user = userRef.get({ plain: true });
+
+      const posts = postsRow.map((post) => {
+        const p = post.get({ plain: true });
+
+        p.postedBy = user;
+
+        return p;
+      });
 
       return posts;
     },
@@ -44,7 +55,10 @@ export default {
       let userRow;
 
       try {
-        userRow = await models.user.findOne({ where: { id: userId } });
+        userRow = await models.user.findOne({
+          where: { id: userId },
+          include: [{ model: models.profile }, { model: models.slug }],
+        });
       } catch (err) {
         throw new Error('Error during query to database');
       }
@@ -70,9 +84,9 @@ export default {
 
       const post = newPost.get({ plain: true });
 
-      console.log(post);
+      post.postedBy = user;
 
-      return 'dasds';
+      return post;
     },
     updatePost: async (_, args, ctx) => {
       isAuth(ctx);
@@ -87,6 +101,7 @@ export default {
 
       const userRow = await models.user.findOne({
         where: { id: ctx.payload.userId },
+        include: [{ model: models.profile }, { model: models.slug }],
       });
 
       if (!userRow) {
@@ -114,7 +129,9 @@ export default {
 
       const updatedPost = editedPost.get({ plain: true });
 
-      return 'sads';
+      updatedPost.postedBy = user;
+
+      return updatedPost;
     },
     deletePost: async (_, args, ctx) => {
       isAuth(ctx);

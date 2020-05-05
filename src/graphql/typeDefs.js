@@ -11,8 +11,8 @@ export default gql`
   type Mutation {
     createUser(username: String!, password: String!, slug: String!): Auth!
     login(username: String!, password: String!): Auth!
-    createPost(description: String, image: String!, tags: [String]): String!
-    updatePost(postId: Int!, description: String, tags: [String]): String!
+    createPost(description: String, image: String!, tags: [String]): Post!
+    updatePost(postId: Int!, description: String, tags: [String]): Post!
     deletePost(postId: Int!): Status!
   }
 
@@ -54,7 +54,7 @@ export default gql`
     tags: [String]
     description: String
     image: String!
-    user: User!
+    postedBy: User!
     createdAt: String!
     updatedAt: String!
   }
