@@ -10,7 +10,6 @@ export const generateAccessToken = (user) => {
 };
 
 export const createRefreshToken = (user) => {
-  console.log(user);
   const payload = {
     userId: user.id,
     tokenVersion: user.tokenVersion,

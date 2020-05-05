@@ -12,6 +12,7 @@ export default gql`
     createUser(username: String!, password: String!, slug: String!): Auth!
     login(username: String!, password: String!): Auth!
     createPost(description: String, image: String!, tags: [String]): String!
+    updatePost(postId: Int!, description: String, tags: [String]): String!
     deletePost(postId: Int!): Status!
   }
 

@@ -6,6 +6,16 @@ import {
   UserInputError,
 } from 'apollo-server-express';
 
+function AuthError() {
+  throw new AuthenticationError(
+    'Unauthorized request : cannot update/delete post.'
+  );
+}
+
+function InternalError(err) {
+  throw new ApolloError(`Something went wrong!`, '500', { error: err });
+}
+
 export default {
   Query: {
     getPostsByUser: async (_, args) => {
@@ -55,7 +65,7 @@ export default {
         });
       } catch (err) {
         console.log(err);
-        throw new ApolloError(`Something went wrong!`, '500', { error: err });
+        InternalError(err);
       }
 
       const post = newPost.get({ plain: true });
@@ -63,6 +73,48 @@ export default {
       console.log(post);
 
       return 'dasds';
+    },
+    updatePost: async (_, args, ctx) => {
+      isAuth(ctx);
+
+      const { postId, description, tags } = args;
+
+      const postRow = await models.post.findOne({ where: { id: postId } });
+
+      if (!postRow) {
+        throw new UserInputError('No post found');
+      }
+
+      const userRow = await models.user.findOne({
+        where: { id: ctx.payload.userId },
+      });
+
+      if (!userRow) {
+        throw new UserInputError('Invalid User');
+      }
+
+      const post = postRow.get({ plain: true });
+
+      const user = userRow.get({ plain: true });
+
+      if (post.postedBy !== user.id) {
+        AuthError();
+      }
+
+      let editedPost;
+
+      try {
+        editedPost = await postRow.update({
+          description,
+          tags,
+        });
+      } catch (err) {
+        InternalError(err);
+      }
+
+      const updatedPost = editedPost.get({ plain: true });
+
+      return 'sads';
     },
     deletePost: async (_, args, ctx) => {
       isAuth(ctx);
@@ -87,9 +139,7 @@ export default {
       const post = postRow.get({ plain: true });
 
       if (post.postedBy !== user.id) {
-        throw new AuthenticationError(
-          'Unauthorized request : cannot delete post.'
-        );
+        AuthError();
       }
 
       let deletedPost;
@@ -101,7 +151,7 @@ export default {
           },
         });
       } catch (err) {
-        throw new ApolloError('Something went wrong', 500, { error: err });
+        InternalError(err);
       }
 
       console.log(deletedPost);
