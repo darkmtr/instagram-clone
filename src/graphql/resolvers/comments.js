@@ -19,6 +19,26 @@ export default {
     },
   },
 
+  Query: {
+    getCommentsByPost: async (_, args) => {
+      const { postId, page, limit } = args;
+
+      const commentsRef = await models.comment.findAll({
+        where: { postId },
+        limit: limit ? limit : 10,
+        offset: page ? page - 1 : 0,
+        order: [['createdAt', 'DESC']],
+      });
+
+      const comments = commentsRef.map((ref) => {
+        const comment = ref.get({ plain: true });
+        comment.author = comment.userId;
+        return comment;
+      });
+
+      return comments;
+    },
+  },
   Mutation: {
     createComment: async (_, args, ctx) => {
       isAuth(ctx);

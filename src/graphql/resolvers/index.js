@@ -8,6 +8,7 @@ export default {
   Query: {
     ...users.Query,
     ...posts.Query,
+    ...comments.Query,
   },
   Mutation: {
     ...users.Mutation,

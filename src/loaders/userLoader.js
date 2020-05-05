@@ -2,7 +2,6 @@ import DataLoader from 'dataloader';
 import models from '../models';
 
 export const userLoader = new DataLoader(async (keys) => {
-  console.log(keys);
   const users = await models.user.findAll({
     where: { id: keys },
     include: [{ model: models.profile }],

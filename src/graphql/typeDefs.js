@@ -7,6 +7,7 @@ export default gql`
     getCurrentUser: User!
     getPostsByUser(userId: Int!): [Post!]!
     getPostById(postId: Int!): Post!
+    getCommentsByPost(postId: Int!, limit: Int, page: Int): [Comment!]!
   }
 
   type Mutation {
