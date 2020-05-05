@@ -6,7 +6,7 @@ export default gql`
     test: String!
     getCurrentUser: User!
     getPostsByUser(userId: Int!): [Post!]!
-    getPostById(postId: Int!): String!
+    getPostById(postId: Int!): Post!
   }
 
   type Mutation {
@@ -16,13 +16,13 @@ export default gql`
     updatePost(postId: Int!, description: String, tags: [String]): Post!
     deletePost(postId: Int!): Status!
     createComment(postId: Int!, text: String!): String!
+    deleteComment(commentId: Int!): Status!
   }
 
   type User {
     id: ID!
     username: String!
     profile: Profile!
-    slug: Slug!
     createdAt: String!
     updatedAt: String!
   }
@@ -40,13 +40,6 @@ export default gql`
     updatedAt: String!
   }
 
-  type Slug {
-    id: ID!
-    slug: String!
-    createdAt: String!
-    updatedAt: String!
-  }
-
   type Auth {
     token: String!
   }
@@ -57,7 +50,16 @@ export default gql`
     description: String
     image: String!
     postedBy: User!
+    comments: [Comment!]!
     createdAt: String!
     updatedAt: String!
+  }
+
+  type Comment {
+    id: ID!
+    text: String!
+    createdAt: String!
+    updatedAt: String!
+    author: User!
   }
 `;

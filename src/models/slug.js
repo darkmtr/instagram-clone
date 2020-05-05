@@ -9,12 +9,6 @@ module.exports = (sequelize, DataTypes) => {
   });
   slug.associate = function (models) {
     // associations can be defined here
-
-    slug.belongsTo(models.user, {
-      foreignKey: {
-        allowNull: false,
-      },
-    });
   };
   return slug;
 };

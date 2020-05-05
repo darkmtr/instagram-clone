@@ -20,5 +20,8 @@ export const createRefreshToken = (user) => {
 };
 
 export const sendRefreshToken = (res, token) => {
-  res.cookie('jid', token, { httpOnly: true });
+  res.cookie('jid', token, {
+    httpOnly: true,
+    expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+  });
 };

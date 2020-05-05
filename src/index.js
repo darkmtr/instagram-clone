@@ -14,6 +14,8 @@ import {
   sendRefreshToken,
 } from './auth';
 
+import { userLoader } from './loaders/userLoader';
+
 const app = express();
 
 app.use(cookieParser());
@@ -56,7 +58,7 @@ app.post('/refresh_token', async (req, res) => {
 const gqlServer = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req, res }) => ({ req, res }),
+  context: ({ req, res }) => ({ req, res, userLoader }),
 });
 
 gqlServer.applyMiddleware({ app });

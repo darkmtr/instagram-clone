@@ -6,13 +6,13 @@ import {
   UserInputError,
 } from 'apollo-server-express';
 
-function AuthError() {
+export function AuthError() {
   throw new AuthenticationError(
     'Unauthorized request : cannot update/delete post.'
   );
 }
 
-function InternalError(err) {
+export function InternalError(err) {
   throw new ApolloError(`Something went wrong!`, '500', { error: err });
 }
 
@@ -28,7 +28,7 @@ export default {
 
       const userRef = await models.user.findOne({
         where: { id: userId },
-        include: [{ model: models.profile }, { model: models.slug }],
+        include: [{ model: models.profile }],
       });
 
       const user = userRef.get({ plain: true });
@@ -51,9 +51,9 @@ export default {
         include: [{ model: models.comment }],
       });
 
-      console.log(postRef);
+      const post = postRef.get({ plain: true });
 
-      return 'Dasds';
+      return post;
     },
   },
   Mutation: {
@@ -69,7 +69,7 @@ export default {
       try {
         userRow = await models.user.findOne({
           where: { id: userId },
-          include: [{ model: models.profile }, { model: models.slug }],
+          include: [{ model: models.profile }],
         });
       } catch (err) {
         throw new Error('Error during query to database');
@@ -113,7 +113,7 @@ export default {
 
       const userRow = await models.user.findOne({
         where: { id: ctx.payload.userId },
-        include: [{ model: models.profile }, { model: models.slug }],
+        include: [{ model: models.profile }],
       });
 
       if (!userRow) {

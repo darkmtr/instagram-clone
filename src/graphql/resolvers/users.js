@@ -55,13 +55,6 @@ export default {
 
       const userObject = user.get({ plain: true });
 
-      const createdSlug = await models.slug.create({
-        slug,
-        userId: userObject.id,
-      });
-
-      const slugObject = createdSlug.get({ plain: true });
-
       const profile = await models.profile.create({ userId: userObject.id });
 
       sendRefreshToken(res, createRefreshToken(userObject));

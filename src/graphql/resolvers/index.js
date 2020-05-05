@@ -4,6 +4,7 @@ import comments from './comments';
 
 export default {
   ...posts.Types,
+  ...comments.Types,
   Query: {
     ...users.Query,
     ...posts.Query,
