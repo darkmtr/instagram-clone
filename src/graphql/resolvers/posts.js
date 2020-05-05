@@ -182,8 +182,42 @@ export default {
       } catch (err) {
         InternalError(err);
       }
+      return {
+        ok: true,
+      };
+    },
+    likePost: async (_, args, ctx) => {
+      isAuth(ctx);
 
-      console.log(deletedPost);
+      const { postId } = args;
+
+      const postRef = await models.post.findOne({ where: { id: postId } });
+
+      if (!postRef) {
+        throw new UserInputError('Post does not exist');
+      }
+
+      const post = postRef.get({ plain: true });
+
+      const userRef = await models.user.findOne({
+        where: { id: ctx.payload.userId },
+      });
+
+      if (!userRef) {
+        throw new UserInputError('User does not exist');
+      }
+
+      const user = userRef.get({ plain: true });
+
+      console.log(user);
+
+      const likeRef = await models.like.create({
+        postId: post.id,
+        userId: user.id,
+      });
+
+      const like = likeRef.get({ plain: true });
+
       return {
         ok: true,
       };

@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
 
     like.belongsTo(models.post);
+    like.belongsTo(models.user);
   };
   return like;
 };

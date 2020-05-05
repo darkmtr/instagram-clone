@@ -17,6 +17,7 @@ export default gql`
     deletePost(postId: Int!): Status!
     createComment(postId: Int!, text: String!): Comment!
     deleteComment(commentId: Int!): Status!
+    likePost(postId: Int!): Status!
   }
 
   type User {
