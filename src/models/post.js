@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'postedBy',
     });
     post.hasMany(models.comment);
+    post.hasMany(models.like);
   };
   return post;
 };
