@@ -191,6 +191,20 @@ export default {
 
       const { postId } = args;
 
+      const didUserLikePost = await models.like.findOne({
+        where: { userId: ctx.payload.userId, postId },
+      });
+
+      if (didUserLikePost) {
+        await models.like.destroy({
+          where: { userId: ctx.payload.userId, postId },
+        });
+
+        return {
+          ok: true,
+        };
+      }
+
       const postRef = await models.post.findOne({ where: { id: postId } });
 
       if (!postRef) {
