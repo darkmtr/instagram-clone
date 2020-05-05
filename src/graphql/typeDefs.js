@@ -12,6 +12,7 @@ export default gql`
     createUser(username: String!, password: String!, slug: String!): Auth!
     login(username: String!, password: String!): Auth!
     createPost(description: String, image: String!, tags: [String]): String!
+    deletePost(postId: Int!): Status!
   }
 
   type User {
@@ -21,6 +22,10 @@ export default gql`
     slug: Slug!
     createdAt: String!
     updatedAt: String!
+  }
+
+  type Status {
+    ok: Boolean!
   }
 
   type Profile {

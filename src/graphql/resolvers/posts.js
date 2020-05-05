@@ -1,6 +1,10 @@
 import { isAuth } from '../../authMiddleware';
 import models from '../../models';
-import { AuthenticationError, ApolloError } from 'apollo-server-express';
+import {
+  AuthenticationError,
+  ApolloError,
+  UserInputError,
+} from 'apollo-server-express';
 
 export default {
   Query: {
@@ -59,6 +63,51 @@ export default {
       console.log(post);
 
       return 'dasds';
+    },
+    deletePost: async (_, args, ctx) => {
+      isAuth(ctx);
+      const { postId } = args;
+
+      const postRow = await models.post.findOne({ where: { id: postId } });
+
+      if (!postRow) {
+        throw new UserInputError('No post found');
+      }
+
+      const userRow = await models.user.findOne({
+        where: { id: ctx.payload.userId },
+      });
+
+      if (!userRow) {
+        throw new UserInputError('No User found');
+      }
+
+      const user = userRow.get({ plain: true });
+
+      const post = postRow.get({ plain: true });
+
+      if (post.postedBy !== user.id) {
+        throw new AuthenticationError(
+          'Unauthorized request : cannot delete post.'
+        );
+      }
+
+      let deletedPost;
+
+      try {
+        deletedPost = await models.post.destroy({
+          where: {
+            id: postId,
+          },
+        });
+      } catch (err) {
+        throw new ApolloError('Something went wrong', 500, { error: err });
+      }
+
+      console.log(deletedPost);
+      return {
+        ok: true,
+      };
     },
   },
 };
