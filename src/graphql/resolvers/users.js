@@ -95,5 +95,54 @@ export default {
         token,
       };
     },
+    followUser: async (_, args, ctx) => {
+      isAuth(ctx);
+
+      const { userId } = args;
+
+      const followerRef = await models.user.findOne({
+        where: { id: ctx.payload.userId },
+      });
+
+      if (!followerRef) {
+        throw new UserInputError('User not found');
+      }
+
+      const didAlreadyFollow = await models.follow.findOne({
+        where: { following: userId, follower: ctx.payload.userId },
+      });
+
+      if (didAlreadyFollow) {
+        await models.follow.destroy({
+          where: { following: userId, follower: ctx.payload.userId },
+        });
+
+        return {
+          ok: true,
+        };
+      }
+
+      const followingRef = await models.user.findOne({
+        where: { id: userId },
+      });
+
+      if (!followingRef) {
+        throw new UserInputError('User not found');
+      }
+
+      const follower = followerRef.get({ plain: true });
+      const following = followingRef.get({ plain: true });
+
+      const follow = await models.follow.create({
+        follower: follower.id,
+        following: following.id,
+      });
+
+      console.log(follow);
+
+      return {
+        ok: true,
+      };
+    },
   },
 };
