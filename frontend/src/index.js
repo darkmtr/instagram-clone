@@ -75,6 +75,8 @@ const client = new ApolloClient({
         });
       },
       handleFetch: (accessToken) => {
+        console.log(accessToken);
+        console.log(localStorage.token);
         localStorage.setItem('token', accessToken);
       },
       handleError: (err) => {

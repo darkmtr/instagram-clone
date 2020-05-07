@@ -21,11 +21,16 @@ function App() {
     fetch('http://localhost:4000/refresh_token', {
       method: 'POST',
       credentials: 'include',
-    }).then(async (d) => {
-      const data = await d.json();
-      setToken(data.token);
-      setLoading(false);
-    });
+    })
+      .then(async (d) => {
+        const data = await d.json();
+        console.log(data);
+        // setToken(data.token);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.dir(err);
+      });
   }, []);
 
   if (loading) {

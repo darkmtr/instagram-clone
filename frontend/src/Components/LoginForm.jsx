@@ -32,7 +32,7 @@ function LoginForm({ history }) {
     },
     onCompleted: (data) => {
       console.log(data);
-      setToken(data.createUser.token);
+      setToken(data.login.token);
       history.push('/user');
     },
   });

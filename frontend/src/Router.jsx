@@ -4,6 +4,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import HomePage from './pages/HomePage';
 import UserPage from './pages/UserPage';
+import ProtectedRoute from './ProtectedRoute';
 
 export default function Router() {
   return (
@@ -11,7 +12,7 @@ export default function Router() {
       <Route exact path='/' component={HomePage} />
       <Route exact path='/login' component={LoginPage} />
       <Route exact path='/register' component={RegisterPage} />
-      <Route exact path='/user' component={UserPage} />
+      <ProtectedRoute exact path='/user' component={UserPage} />
     </Switch>
   );
 }
