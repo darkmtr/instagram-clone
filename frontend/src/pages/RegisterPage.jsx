@@ -6,7 +6,7 @@ import RegisterForm from '../Components/RegisterForm';
 
 const Section = styled.section`
   padding: 30px;
-  background-color: #fafafa;
+  background-color: ${(props) => props.theme.colors.background};
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -15,7 +15,7 @@ const Section = styled.section`
 `;
 
 const FormContainer = styled.div`
-  background-color: #fff;
+  background-color: ${(props) => props.theme.colors.container};
   width: 350px;
   border: 1px solid #ccc;
   border-radius: 5px;

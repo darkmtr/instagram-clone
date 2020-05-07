@@ -14,7 +14,7 @@ const Form = styled.form`
   text-align: left;
 `;
 
-function RegisterForm({ history }) {
+function LoginForm({ history }) {
   const setToken = useContext(AuthContext).setToken;
 
   const [values, setValues] = useState({
@@ -22,12 +22,13 @@ function RegisterForm({ history }) {
     password: '',
   });
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState('');
 
-  const [createUser, { loading }] = useMutation(CREATE_USER_MUTATION, {
+  const [loginUser, { loading }] = useMutation(LOGIN_USER_MUTATION, {
     variables: { username: values.username, password: values.password },
     onError: (err) => {
-      setErrors(err.graphQLErrors[0].extensions.errors);
+      console.log(err);
+      setErrors(err.graphQLErrors[0].message);
     },
     onCompleted: (data) => {
       console.log(data);
@@ -45,7 +46,7 @@ function RegisterForm({ history }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    createUser();
+    loginUser();
   };
 
   return (
@@ -57,7 +58,7 @@ function RegisterForm({ history }) {
         name='username'
         placeholder='Username'
         type='text'
-        error={errors && errors.username && errors.username.msg}
+        error={errors && errors}
       />
       <Input
         label='Password'
@@ -66,24 +67,23 @@ function RegisterForm({ history }) {
         name='password'
         placeholder='Password'
         type='password'
-        error={errors && errors.password && errors.password.msg}
       />
 
       <StyledButton
         disabled={loading || !values.username.length || !values.password.length}
         disabled={loading || !values.username.length || !values.password.length}
       >
-        Sign Up
+        Log in
       </StyledButton>
     </Form>
   );
 }
 
-export default withRouter(RegisterForm);
+export default withRouter(LoginForm);
 
-const CREATE_USER_MUTATION = gql`
-  mutation createUser($username: String!, $password: String!) {
-    createUser(username: $username, password: $password) {
+const LOGIN_USER_MUTATION = gql`
+  mutation login($username: String!, $password: String!) {
+    login(username: $username, password: $password) {
       token
     }
   }

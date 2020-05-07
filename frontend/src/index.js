@@ -11,9 +11,13 @@ import { ApolloLink, Observable } from 'apollo-link';
 import { onError } from 'apollo-link-error';
 import { TokenRefreshLink } from 'apollo-link-token-refresh';
 import jwtDecode from 'jwt-decode';
+import { ThemeProvider } from 'styled-components';
 
 import AuthProvider from './context/AuthContext';
 import App from './App';
+
+import lightTheme from './light';
+import darkTheme from './dark';
 
 const requestLink = new ApolloLink(
   (operation, forward) =>
@@ -94,9 +98,11 @@ const client = new ApolloClient({
 ReactDOM.render(
   <Router>
     <ApolloProvider client={client}>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
+      <ThemeProvider theme={lightTheme}>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </ThemeProvider>
     </ApolloProvider>
   </Router>,
   document.getElementById('root')

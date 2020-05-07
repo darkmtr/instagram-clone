@@ -1,66 +1,81 @@
-import React, { useState, useContext } from 'react';
-import gql from 'graphql-tag';
-import { useMutation } from '@apollo/react-hooks';
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
-import { AuthContext } from '../context/AuthContext';
+import RegisterForm from '../Components/RegisterForm';
+import LoginForm from '../Components/LoginForm';
 
-const LoginPage = ({ history }) => {
-  const setToken = useContext(AuthContext).setToken;
+const Section = styled.section`
+  padding: 30px;
+  background-color: ${(props) => props.theme.colors.background};
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: center; */
+`;
 
-  const [values, setValues] = useState({
-    username: '',
-    password: '',
-  });
+const FormContainer = styled.div`
+  background-color: ${(props) => props.theme.colors.container};
+  width: 350px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  height: 50%;
+  padding: 50px 30px;
+  text-align: center;
+`;
 
-  const [loginUser] = useMutation(LOGIN_MUTATION, {
-    variables: { username: values.username, password: values.password },
-    onError: (err) => {
-      console.log(err);
-    },
-    onCompleted: (data) => {
-      console.log(data);
-      setToken(data.login.token);
-      history.push('/');
-    },
-  });
+const MiniSection = styled(FormContainer)`
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem;
+  height: 100px;
+`;
 
-  const handleChange = (e) => {
-    setValues({
-      ...values,
-      [e.target.name]: e.target.value,
-    });
-  };
+const InstaIcon = styled.i`
+  font-size: 5rem;
+  margin-bottom: 1.5rem;
+`;
 
-  const handleClick = (e) => {
-    e.preventDefault();
-    loginUser();
-  };
+export const SoftText = styled.h2`
+  color: #8e8e8e;
+  font-weight: bold;
+  font-size: ${(props) => (props.size ? props.size : 1.9)}rem;
+  margin: 0 1rem;
+`;
 
+export const StyledButton = styled.button`
+  margin: ${(props) => (props.margin ? props.margin : 2)}rem 0;
+  border: none;
+  background-color: ${(props) => (props.disabled ? '#b2dffc' : '#0095f6')};
+  width: 100%;
+  cursor: ${(props) => (props.disabled ? 'auto' : 'pointer')};
+  padding: 0.8rem;
+  border-radius: 0.5rem;
+  color: #fff;
+  outline: none;
+`;
+
+const ClientLink = styled(Link)`
+  text-decoration: none;
+`;
+
+const RegisterPage = ({ history }) => {
   return (
-    <div>
-      <form onSubmit={handleClick}>
-        <input
-          name='username'
-          value={values.username}
-          onChange={handleChange}
-        />
-        <input
-          name='password'
-          value={values.password}
-          onChange={handleChange}
-        />
-        <button>Submit</button>
-      </form>
-    </div>
+    <Section>
+      <FormContainer>
+        <InstaIcon className='fab fa-instagram' />
+        <LoginForm />
+      </FormContainer>
+      <MiniSection>
+        <SoftText size={1.5}>
+          Don't have an account? <ClientLink to='/register'>log in</ClientLink>
+        </SoftText>
+      </MiniSection>
+    </Section>
   );
 };
 
-export default LoginPage;
-
-export const LOGIN_MUTATION = gql`
-  mutation login($username: String!, $password: String!) {
-    login(username: $username, password: $password) {
-      token
-    }
-  }
-`;
+export default RegisterPage;
