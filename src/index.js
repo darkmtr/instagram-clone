@@ -4,6 +4,8 @@ import cookieParser from 'cookie-parser';
 import { config } from 'dotenv';
 config();
 
+import cors from 'cors';
+
 import typeDefs from './graphql/typeDefs';
 import resolvers from './graphql/resolvers';
 import { verify } from 'jsonwebtoken';
@@ -19,6 +21,13 @@ import { userLoader } from './loaders/userLoader';
 const app = express();
 
 app.use(cookieParser());
+
+app.use(
+  cors({
+    credentials: true,
+    origin: 'http://localhost:3000',
+  })
+);
 
 app.post('/refresh_token', async (req, res) => {
   console.log(req.cookies);
@@ -61,6 +70,6 @@ const gqlServer = new ApolloServer({
   context: ({ req, res }) => ({ req, res, userLoader }),
 });
 
-gqlServer.applyMiddleware({ app });
+gqlServer.applyMiddleware({ app, cors: false });
 
 app.listen({ port: 4000 }, () => console.log('Server started on PORT : 4000'));

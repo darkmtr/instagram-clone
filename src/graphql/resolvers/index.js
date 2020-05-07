@@ -6,6 +6,7 @@ export default {
   ...posts.Types,
   ...comments.Types,
   Query: {
+    hello: () => 'hola',
     ...users.Query,
     ...posts.Query,
     ...comments.Query,

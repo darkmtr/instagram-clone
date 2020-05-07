@@ -19,11 +19,21 @@ export default {
 
       const userRow = await models.user.findAll({
         where: { id: userId },
-        include: [{ model: models.profile }, { model: models.slug }],
+        include: [{ model: models.profile }],
       });
 
       const user = userRow[0].get({ plain: true });
 
+      const followers = await models.follow.count({
+        where: { following: user.id },
+      });
+
+      const following = await models.follow.count({
+        where: { follower: user.id },
+      });
+
+      user.followers = followers;
+      user.following = following;
       user.password = undefined;
       return user;
     },
