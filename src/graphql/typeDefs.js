@@ -11,6 +11,7 @@ export default gql`
 
   type Mutation {
     createUser(username: String!, password: String!): Auth!
+    changeAvatar(avatar: String!): User!
     login(username: String!, password: String!): Auth!
     createPost(description: String, image: String!, tags: [String]): Post!
     updatePost(postId: Int!, description: String, tags: [String]): Post!

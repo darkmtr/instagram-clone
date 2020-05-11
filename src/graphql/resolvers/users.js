@@ -66,6 +66,42 @@ export default {
 
       return { token };
     },
+    changeAvatar: async (_, args, ctx) => {
+      isAuth(ctx);
+
+      const userRow = await models.user.findOne({
+        where: { id: ctx.payload.userId },
+      });
+
+      const profileRow = await models.profile.findOne({
+        where: { userId: userRow.id },
+      });
+
+      const updated = await profileRow.update({
+        avatar: args.avatar,
+      });
+
+      const u = await models.user.findOne({
+        where: { id: ctx.payload.userId },
+        include: [{ model: models.profile }],
+      });
+
+      const user = u.get({ plain: true });
+
+      const followers = await models.follow.count({
+        where: { following: user.id },
+      });
+
+      const following = await models.follow.count({
+        where: { follower: user.id },
+      });
+
+      user.followers = followers;
+      user.following = following;
+      user.password = undefined;
+
+      return user;
+    },
     login: async (_, args, { res }) => {
       const { username, password } = args;
 

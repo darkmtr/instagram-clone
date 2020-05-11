@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 import RegisterForm from '../Components/RegisterForm';
+import { AuthContext } from '../context/AuthContext';
 
 const Section = styled.section`
   padding: 30px;
@@ -62,6 +63,12 @@ const ClientLink = styled(Link)`
 `;
 
 const RegisterPage = ({ history }) => {
+  const token = useContext(AuthContext).token;
+
+  if (token || localStorage.token) {
+    return <Redirect to='/user' />;
+  }
+
   return (
     <Section>
       <FormContainer>

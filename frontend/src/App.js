@@ -1,11 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
-import Router from './Router';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { withRouter } from 'react-router-dom';
+
+import { ToastContainer } from 'react-toastify';
+
+import Router from './Router';
 import { AuthContext } from './context/AuthContext';
+import Navbar from './Components/Navbar';
 
 import './App.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 const QUERY = gql`
   query hello {
@@ -13,24 +20,23 @@ const QUERY = gql`
   }
 `;
 
-function App() {
+function App({ location }) {
   const setToken = useContext(AuthContext).setToken;
   const [loading, setLoading] = useState(true);
 
+  const fetchToken = async () => {
+    const res = await axios.post('http://localhost:4000/refresh_token', null, {
+      withCredentials: true,
+    });
+    const { data } = res;
+    setLoading(false);
+    if (data.token !== '') {
+      setToken(data.token);
+    }
+  };
+
   useEffect(() => {
-    fetch('http://localhost:4000/refresh_token', {
-      method: 'POST',
-      credentials: 'include',
-    })
-      .then(async (d) => {
-        const data = await d.json();
-        console.log(data);
-        // setToken(data.token);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.dir(err);
-      });
+    fetchToken();
   }, []);
 
   if (loading) {
@@ -39,9 +45,11 @@ function App() {
 
   return (
     <div>
+      {!['/login', 'register'].includes(location.pathname) && <Navbar />}
       <Router />
+      <ToastContainer />
     </div>
   );
 }
 
-export default App;
+export default withRouter(App);

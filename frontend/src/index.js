@@ -15,6 +15,7 @@ import { ThemeProvider } from 'styled-components';
 
 import AuthProvider from './context/AuthContext';
 import App from './App';
+import './assets/icon-font.css';
 
 import lightTheme from './light';
 import darkTheme from './dark';
@@ -90,7 +91,7 @@ const client = new ApolloClient({
     }),
     requestLink,
     new HttpLink({
-      uri: 'http://192.168.1.9:4000/graphql',
+      uri: 'http://localhost:4000/graphql',
       credentials: 'include',
     }),
   ]),
