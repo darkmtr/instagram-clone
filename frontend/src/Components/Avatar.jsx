@@ -41,8 +41,8 @@ const AvatarImg = styled.img`
 `;
 
 const EditButton = styled.button`
-  padding: 0.5rem 2.5rem;
-  border-radius: 4rem;
+  padding: 0.5rem 1rem;
+  border-radius: 10rem;
   background: #fff;
   color: #000;
   border: none;
@@ -89,7 +89,7 @@ export default function Avatar({ src }) {
         <AvatarImg src={src} />
         <Layer>
           <EditButton>
-            <i className='fas fa-cog'></i> Update
+            <i className='fas fa-cog'></i>
           </EditButton>
         </Layer>
       </ImageContainer>

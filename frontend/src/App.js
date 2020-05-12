@@ -4,7 +4,6 @@ import gql from 'graphql-tag';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
-
 import { ToastContainer } from 'react-toastify';
 
 import Router from './Router';
@@ -20,7 +19,7 @@ const QUERY = gql`
   }
 `;
 
-function App({ location }) {
+function App({ history, location }) {
   const setToken = useContext(AuthContext).setToken;
   const [loading, setLoading] = useState(true);
 
@@ -45,7 +44,7 @@ function App({ location }) {
 
   return (
     <div>
-      {!['/login', 'register'].includes(location.pathname) && <Navbar />}
+      {!['/login', '/register'].includes(location.pathname) && <Navbar />}
       <Router />
       <ToastContainer />
     </div>

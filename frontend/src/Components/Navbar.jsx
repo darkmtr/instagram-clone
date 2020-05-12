@@ -69,7 +69,7 @@ export default function Navbar() {
             </ClientLink>
           </NavLinks>
           <NavLinks>
-            <ClientLink to='/likes'>
+            <ClientLink to='/create/post'>
               <Icon src={Heart} />
             </ClientLink>
           </NavLinks>
@@ -85,8 +85,9 @@ export default function Navbar() {
 }
 
 const Avatar = styled.img`
-  height: 2.5rem;
   border-radius: 50%;
+  height: 2.5rem;
+  width: 2.5rem;
 `;
 
 function UserIcon() {
